@@ -173,7 +173,7 @@ function saveGeneratedImageArtifact(modelDir, filename, imageData) {
   if (os.platform() !== 'android') {
     // using a separate directory for iOS to avoid pulling the model file on device farm runs
     const artifactDir = os.platform() === 'ios'
-      ? path.resolve(__dirname, '../generated-images')
+      ? path.resolve(modelDir, '../generated-images')
       : modelDir
     fs.mkdirSync(artifactDir, { recursive: true })
     const primaryOutPath = path.join(artifactDir, filename)
