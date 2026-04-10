@@ -171,17 +171,11 @@ function setupJsLogger (binding) {
 
 function saveGeneratedImageArtifact(modelDir, filename, imageData) {
   if (os.platform() !== 'android') {
-    const primaryOutPath = path.join(modelDir, filename)
-    fs.writeFileSync(primaryOutPath, imageData)
-    console.log(`\nImage saved to ${primaryOutPath}`)
-
-    if (os.platform() === 'ios') {
-      const artifactDir = path.resolve(modelDir, '../generated-images')
-      fs.mkdirSync(artifactDir, { recursive: true })
-      const artifactPath = path.join(artifactDir, filename)
-      fs.writeFileSync(artifactPath, imageData)
-      console.log(`Copied iOS artifact to ${artifactPath}`)
-    }
+    const imagesDir = path.resolve(modelDir, '../generated-images')
+    fs.mkdirSync(imagesDir, { recursive: true })
+    const artifactPath = path.join(imagesDir, filename)
+    fs.writeFileSync(artifactPath, imageData)
+    console.log(`Saved image to ${artifactPath}`)
 
     return
   }
