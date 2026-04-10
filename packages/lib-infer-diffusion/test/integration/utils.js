@@ -3,7 +3,6 @@ const fs = require('bare-fs')
 const path = require('bare-path')
 const https = require('bare-https')
 const os = require('bare-os')
-const proc = require('bare-process')
 
 async function downloadFile (url, dest) {
   return new Promise((resolve, reject) => {
@@ -170,21 +169,9 @@ function setupJsLogger (binding) {
   return binding
 }
 
-function getIosArtifactDir () {
-  const homeDir = proc.env?.HOME_DIR || proc.argv?.[0]
-  if (!homeDir || homeDir === 'worker.js' || homeDir.startsWith('file://')) {
-    throw new Error(`Could not resolve writable iOS Documents directory from runtime: ${homeDir || 'missing'}`)
-  }
-  return path.join(homeDir, 'test', 'generated-images')
-}
-
 function saveGeneratedImageArtifact(modelDir, filename, imageData) {
   if (os.platform() !== 'android') {
-    const artifactDir = os.platform() === 'ios'
-      ? getIosArtifactDir()
-      : modelDir
-    fs.mkdirSync(artifactDir, { recursive: true })
-    const primaryOutPath = path.join(artifactDir, filename)
+    const primaryOutPath = path.join(modelDir, filename)
     fs.writeFileSync(primaryOutPath, imageData)
     console.log(`\nImage saved to ${primaryOutPath}`)
     return
